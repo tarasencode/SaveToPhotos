@@ -8,20 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		7C519A95245FF5B600F4BB0F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C519A94245FF5B600F4BB0F /* AppDelegate.swift */; };
-		7C519A97245FF5B600F4BB0F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C519A96245FF5B600F4BB0F /* ViewController.swift */; };
 		7C519A9A245FF5B600F4BB0F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C519A98245FF5B600F4BB0F /* Main.storyboard */; };
 		7C519A9C245FF5B700F4BB0F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C519A9B245FF5B700F4BB0F /* Assets.xcassets */; };
 		7C519A9F245FF5B700F4BB0F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C519A9D245FF5B700F4BB0F /* LaunchScreen.storyboard */; };
+		7C519AA724603FF700F4BB0F /* Saver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C519AA624603FF700F4BB0F /* Saver.swift */; };
+		7C519AA9246065C300F4BB0F /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C519AA8246065C300F4BB0F /* TableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7C519A91245FF5B600F4BB0F /* Save to Photos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Save to Photos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C519A94245FF5B600F4BB0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		7C519A96245FF5B600F4BB0F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		7C519A99245FF5B600F4BB0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7C519A9B245FF5B700F4BB0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7C519A9E245FF5B700F4BB0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7C519AA0245FF5B700F4BB0F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7C519AA624603FF700F4BB0F /* Saver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Saver.swift; sourceTree = "<group>"; };
+		7C519AA8246065C300F4BB0F /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,7 +57,8 @@
 			isa = PBXGroup;
 			children = (
 				7C519A94245FF5B600F4BB0F /* AppDelegate.swift */,
-				7C519A96245FF5B600F4BB0F /* ViewController.swift */,
+				7C519AA8246065C300F4BB0F /* TableViewController.swift */,
+				7C519AA624603FF700F4BB0F /* Saver.swift */,
 				7C519A98245FF5B600F4BB0F /* Main.storyboard */,
 				7C519A9B245FF5B700F4BB0F /* Assets.xcassets */,
 				7C519A9D245FF5B700F4BB0F /* LaunchScreen.storyboard */,
@@ -135,7 +138,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C519A97245FF5B600F4BB0F /* ViewController.swift in Sources */,
+				7C519AA724603FF700F4BB0F /* Saver.swift in Sources */,
+				7C519AA9246065C300F4BB0F /* TableViewController.swift in Sources */,
 				7C519A95245FF5B600F4BB0F /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -283,6 +287,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = HRK54QG7WN;
 				INFOPLIST_FILE = "Save to Photos/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -300,6 +305,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = HRK54QG7WN;
 				INFOPLIST_FILE = "Save to Photos/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
