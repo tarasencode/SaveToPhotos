@@ -10,26 +10,71 @@ import UIKit
 
 class TableViewController: UITableViewController {
     @IBOutlet var progressView: UIProgressView!
+    @IBOutlet var emptyView: UILabel!
+    @IBOutlet var mainView: UITableView!
+    
     
     @IBOutlet var barButton: UIBarButtonItem!
     @IBAction func saveButtonPressed(_ sender: Any) {
-        // сделать кнопку Save неактивной, если не выбран ни один файл
-        progressView.progress = 0
-        
         if barButton.title == "Save" {
             svr.canceled = false
+            progressView.progress = 0
             progressView.isHidden = false
             barButton.title = "Cancel"
-            svr.moveToCameraRoll(progressView: progressView, cancelButton: barButton)
+            moveToPhotos()
         } else {
             svr.canceled = true
             progressView.isHidden = true
-            barButton.title = "Save"            
+            barButton.title = "Save"
         }
+    }
 
-
-        
-        
+    func moveToPhotos() {
+        let progress = Progress(totalUnitCount: svr.filesCount)
+        var processed = 0
+        var skipped = 0
+        let serialQueue = DispatchQueue(label: "moving.queue")
+        serialQueue.async {
+            for album in self.svr.data {
+                guard !self.svr.canceled else { break }
+                self.svr.currentAlbum = nil
+                for file in album {
+                    guard !self.svr.canceled else { break }
+                    guard file.selected else {
+                        skipped += 1
+                        progress.completedUnitCount += 1
+    //                    print("skipped \(file.album) \(file.name)")
+                        continue
+                    }
+                    if self.svr.currentAlbum == nil {
+    //                    print("acessing album")
+                        self.svr.currentAlbum = self.svr.findAssetCollection(album: file.album)
+                    }
+                    
+                    self.svr.addAsset(file: file, album: self.svr.currentAlbum!)
+                    processed += 1
+                    // обновляем прогресс
+                    DispatchQueue.main.async {
+                        print("[ \(processed) of \(Int(self.svr.filesCount) - skipped) ] \(file.name) moved to photos")
+                        
+                        if !self.svr.canceled {
+                            progress.completedUnitCount += 1
+                            self.progressView.setProgress(Float(progress.fractionCompleted), animated: true)
+                        } else {
+                            self.progressView.isHidden = true
+                            self.barButton.title = "Save"
+                            print("cancel")
+                        }
+                        if processed + skipped == self.svr.filesCount {
+                            //self.progressView.progress = 100
+                            self.barButton.title = "Save"
+                            print("finished")
+                        }
+                    }
+                    
+                }
+            }
+        }
     }
     
     var svr = Saver()
@@ -39,7 +84,7 @@ class TableViewController: UITableViewController {
         super.viewDidLoad()
         
         svr.getFiles()
-        
+
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -52,6 +97,11 @@ class TableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
+        if svr.data.count < 1 {
+            mainView.backgroundView = emptyView
+            mainView.separatorStyle = .none
+            navigationItem.rightBarButtonItem?.isEnabled = false
+        }
         return svr.data.count
     }
 
@@ -79,7 +129,7 @@ class TableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        svr.data[indexPath.section][indexPath.row].changeState()
+        svr.data[indexPath.section][indexPath.row].toggleSelection()
         tableView.reloadData() // возможно лучше 
 
     }
@@ -147,3 +197,26 @@ class TableViewController: UITableViewController {
 //        alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
 //        self.present(alert, animated: true)
 //
+
+
+//DispatchQueue.global(qos: .background).async {
+//    self.svr.addAsset(file: file, album: self.svr.currentAlbum!)
+//
+//    DispatchQueue.main.async {
+//        processed += 1
+//        // обновляем прогресс
+//        print("[ \(processed) of \(Int(self.svr.filesCount) - skipped) ] \(file.name) moved to photos")
+//        if !self.svr.canceled {
+//            progress.completedUnitCount += 1
+//            self.progressView.setProgress(Float(progress.fractionCompleted), animated: true )
+//        } else {
+//            self.stopMoving()
+//            print("canceling")
+//        }
+//        if processed + skipped == self.svr.filesCount {
+//            self.progressView.progress = 100
+//            self.barButton.title = "Save"
+//            print("finished")
+//        }
+//    }
+//}

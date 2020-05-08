@@ -54,10 +54,28 @@
                     </navigationItem>
                     <connections>
                         <outlet property="barButton" destination="QC7-15-XX0" id="y1Y-Sc-3e2"/>
+                        <outlet property="emptyView" destination="IDY-Qx-mdt" id="kKg-lG-w3S"/>
+                        <outlet property="mainView" destination="o8y-5c-vo0" id="al3-b2-b1E"/>
                         <outlet property="progressView" destination="4XR-ZI-3Sn" id="tO3-PN-dDH"/>
+                        <outlet property="tableView" destination="o8y-5c-vo0" id="17G-nq-7Z0"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qeb-R2-f8U" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="middleTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IDY-Qx-mdt">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <attributedString key="attributedText">
+                        <fragment>
+                            <string key="content">iTunes File Sharing 
+folder is empty</string>
+                            <attributes>
+                                <font key="NSFont" size="17" name=".AppleSystemUIFont"/>
+                                <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="truncatingTail" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                            </attributes>
+                        </fragment>
+                    </attributedString>
+                    <nil key="highlightedColor"/>
+                </label>
             </objects>
             <point key="canvasLocation" x="1119.2" y="-228.03598200899552"/>
         </scene>
