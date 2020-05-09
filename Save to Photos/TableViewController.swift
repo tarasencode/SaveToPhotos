@@ -8,11 +8,18 @@
 
 import UIKit
 
+
 class TableViewController: UITableViewController {
     @IBOutlet var progressView: UIProgressView!
-    @IBOutlet var emptyView: UILabel!
+    
+    @IBOutlet var emptyView: UIView!
     @IBOutlet var mainView: UITableView!
     
+    
+    @IBAction func supportPressed(_ sender: Any) {
+        guard let url = URL(string: "https://support.apple.com/en-us/HT201301") else { return }
+        UIApplication.shared.open(url)
+    }
     
     @IBOutlet var barButton: UIBarButtonItem!
     @IBAction func saveButtonPressed(_ sender: Any) {
@@ -28,7 +35,16 @@ class TableViewController: UITableViewController {
             barButton.title = "Save"
         }
     }
-
+    
+    func selectAll() {
+        
+    }
+    
+    func deselectAll() {
+        
+    }
+    
+    
     func moveToPhotos() {
         let progress = Progress(totalUnitCount: svr.filesCount)
         var processed = 0
@@ -55,6 +71,7 @@ class TableViewController: UITableViewController {
                     processed += 1
                     // обновляем прогресс
                     DispatchQueue.main.async {
+                        self.svr.deleteFile(at: file.URL)
                         print("[ \(processed) of \(Int(self.svr.filesCount) - skipped) ] \(file.name) moved to photos")
                         
                         if !self.svr.canceled {
@@ -66,7 +83,7 @@ class TableViewController: UITableViewController {
                             print("cancel")
                         }
                         if processed + skipped == self.svr.filesCount {
-                            //self.progressView.progress = 100
+                            self.svr.deleteFolders()
                             self.barButton.title = "Save"
                             print("finished")
                         }
@@ -98,9 +115,10 @@ class TableViewController: UITableViewController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         if svr.data.count < 1 {
-            mainView.backgroundView = emptyView
-            mainView.separatorStyle = .none
+            tableView.backgroundView = emptyView
+            tableView.separatorStyle = .none
             navigationItem.rightBarButtonItem?.isEnabled = false
+            navigationItem.leftBarButtonItem?.isEnabled = false
         }
         return svr.data.count
     }

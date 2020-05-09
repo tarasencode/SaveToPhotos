@@ -9,50 +9,6 @@
 import Foundation
 import Photos
 
-enum MediaType {
-    case photo
-    case video
-}
-
-struct File {
-    let URL: URL
-    
-    var selected: Bool = true /*{
-        switch Int.random(in: 0...1) {
-        case 0:
-            return true
-        default:
-            return false
-        }
-    } */
-    
-    var name: String {
-       return URL.lastPathComponent
-    }
-    
-    var mediaType: MediaType {
-        switch "hevc:mp4:mov".contains(URL.pathExtension.lowercased()){
-            case true: return .video
-            case false: return .photo
-        }
-    }
-    
-    var album: String {
-        guard URL.pathComponents[URL.pathComponents.count - 2] != "Documents" else {
-            return "PhotoImport"
-        }
-        return URL.pathComponents[URL.pathComponents.count - 2]
-    }
-    
-    init(fileURL: URL) {
-        self.URL = fileURL
-    }
-    
-    mutating func toggleSelection() {
-       selected.toggle()
-    }
-}
-
 class Saver {
 
     var data = [[File]]()
@@ -172,6 +128,30 @@ class Saver {
             })
         } catch { print("there is an error in asset")}
         
+    }
+    
+    func deleteFile(at url: URL) {
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch  { print(error) }
+    }
+    
+    func deleteFolders() {
+        let fileManager = FileManager()
+        let directoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        let resourceKeys = Set<URLResourceKey>([.isDirectoryKey])
+        let directoryEnumerator = fileManager.enumerator(at: directoryURL, includingPropertiesForKeys: Array(resourceKeys), options: .skipsHiddenFiles)!
+        
+        
+        for case let fileURL as URL in directoryEnumerator {
+            if let resourceValues = try? fileURL.resourceValues(forKeys: resourceKeys),
+                                                            resourceValues.isDirectory! {
+                do {
+                    try FileManager.default.removeItem(at: fileURL)
+                } catch  { print(error) }
+            }
+            
+        }
     }
     
 }
