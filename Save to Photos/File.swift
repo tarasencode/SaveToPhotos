@@ -23,9 +23,11 @@ struct File {
         }
     }
     
+    static let rootAlbumName = "PhotoImport"
+    
     var album: String {
         guard URL.pathComponents[URL.pathComponents.count - 2] != "Documents" else {
-            return "PhotoImport"
+            return File.rootAlbumName
         }
         return URL.pathComponents[URL.pathComponents.count - 2]
     }

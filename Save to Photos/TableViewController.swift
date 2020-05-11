@@ -44,35 +44,47 @@ class TableViewController: UITableViewController {
         
     }
     
-    
     func moveToPhotos() {
         let progress = Progress(totalUnitCount: svr.filesCount)
-        var processed = 0
-        var skipped = 0
+        var totalProcessed = 0
+        var totalSkipped = 0
+
         let serialQueue = DispatchQueue(label: "moving.queue")
         serialQueue.async {
-            for album in self.svr.data {
-                guard !self.svr.canceled else { break }
-                self.svr.currentAlbum = nil
+            let svr = self.svr
+            for album in svr.data {
+                guard !svr.canceled else { break }
+                svr.currentAlbum = nil
+                var photosProcessed = 0
                 for file in album {
-                    guard !self.svr.canceled else { break }
+                    guard !svr.canceled else { break }
                     guard file.selected else {
-                        skipped += 1
+                        totalSkipped += 1
                         progress.completedUnitCount += 1
     //                    print("skipped \(file.album) \(file.name)")
                         continue
                     }
-                    if self.svr.currentAlbum == nil {
+                    if svr.currentAlbum == nil {
     //                    print("acessing album")
-                        self.svr.currentAlbum = self.svr.findAssetCollection(album: file.album)
+                        svr.currentAlbum = svr.findAssetCollection(album: file.album)
                     }
                     
-                    self.svr.addAsset(file: file, album: self.svr.currentAlbum!)
-                    processed += 1
-                    // обновляем прогресс
+                    svr.addAsset(file: file, album: svr.currentAlbum!)
+                    photosProcessed += 1
+                    totalProcessed += 1
+                    
+                    
                     DispatchQueue.main.async {
-                        self.svr.deleteFile(at: file.URL)
-                        print("[ \(processed) of \(Int(self.svr.filesCount) - skipped) ] \(file.name) moved to photos")
+                        // delete file
+                        svr.deleteFile(at: file.URL)
+                        
+                        // delete folder if it's empty and not root
+                        if photosProcessed == album.count,
+                            file.album != File.rootAlbumName {
+                            svr.deleteFile(at: file.URL.deletingLastPathComponent())
+                        }
+                        
+                        print("[ \(totalProcessed) of \(Int(svr.filesCount) - totalSkipped) ] \(file.name) moved to photos")
                         
                         if !self.svr.canceled {
                             progress.completedUnitCount += 1
@@ -82,10 +94,14 @@ class TableViewController: UITableViewController {
                             self.barButton.title = "Save"
                             print("cancel")
                         }
-                        if processed + skipped == self.svr.filesCount {
-                            self.svr.deleteFolders()
+                        if totalProcessed + totalSkipped == svr.filesCount {
+                            svr.getFiles()
+                            self.tableView.reloadData()
                             self.barButton.title = "Save"
-                            print("finished")
+                            let alert = UIAlertController(title: "Done", message: "\(totalProcessed) file(s) was moved to Photos!", preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .cancel, handler: nil))
+                            self.present(alert, animated: true)
+                            
                         }
                     }
                     
@@ -102,11 +118,6 @@ class TableViewController: UITableViewController {
         
         svr.getFiles()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
 
     }
 
@@ -125,7 +136,6 @@ class TableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        
         return svr.data[section].count
     }
 
@@ -148,7 +158,7 @@ class TableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         svr.data[indexPath.section][indexPath.row].toggleSelection()
-        tableView.reloadData() // возможно лучше 
+        tableView.reloadData()
 
     }
     

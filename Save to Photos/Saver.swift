@@ -13,6 +13,7 @@ class Saver {
 
     var data = [[File]]()
     
+    
     var filesCount: Int64 {
         return Int64(data.flatMap { $0 }.count)
     }
@@ -20,7 +21,9 @@ class Saver {
     
     var currentAlbum: PHAssetCollection? = nil
     
-    func getFiles() {        
+    
+    func getFiles() {
+        data = [[File]]()
         let fileManager = FileManager()
         let directoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let resourceKeys = Set<URLResourceKey>([.isRegularFileKey])
@@ -136,22 +139,34 @@ class Saver {
         } catch  { print(error) }
     }
     
-    func deleteFolders() {
-        let fileManager = FileManager()
-        let directoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-        let resourceKeys = Set<URLResourceKey>([.isDirectoryKey])
-        let directoryEnumerator = fileManager.enumerator(at: directoryURL, includingPropertiesForKeys: Array(resourceKeys), options: .skipsHiddenFiles)!
-        
-        
-        for case let fileURL as URL in directoryEnumerator {
-            if let resourceValues = try? fileURL.resourceValues(forKeys: resourceKeys),
-                                                            resourceValues.isDirectory! {
-                do {
-                    try FileManager.default.removeItem(at: fileURL)
-                } catch  { print(error) }
-            }
-            
-        }
-    }
+//    func deleteFolders() {
+//        let fileManager = FileManager()
+//        let directoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+//        let resourceKeys = Set<URLResourceKey>([.isDirectoryKey])
+//        let directoryEnumerator = fileManager.enumerator(at: directoryURL, includingPropertiesForKeys: Array(resourceKeys), options: [.skipsHiddenFiles,.skipsSubdirectoryDescendants])!
+//        
+//        
+//        for case let fileURL as URL in directoryEnumerator {
+//            if let resourceValues = try? fileURL.resourceValues(forKeys: resourceKeys) {
+//                guard resourceValues.isDirectory! else { continue }
+//                // is an empty folder?
+//                print(fileURL)
+//                let resourceKeys = Set<URLResourceKey>([.isRegularFileKey])
+//                let fileEnumerator = fileManager.enumerator(at: fileURL, includingPropertiesForKeys: Array(resourceKeys), options: [.skipsHiddenFiles])!
+//
+////                guard fileEnumerator.nextObject() != nil else {
+////                    print("folder is not empty")
+////                    continue
+////                }
+//                
+//                // delete
+////                do {
+////                    try FileManager.default.removeItem(at: fileURL)
+////                    print("rem: \(fileURL)")
+////                } catch  { print(error) }
+//            }
+//            
+//        }
+//    }
     
 }
