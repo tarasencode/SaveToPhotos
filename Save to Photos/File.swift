@@ -7,38 +7,26 @@
 //
 import Foundation
 
-struct File {
-    let URL: URL
-    
-    var selected: Bool = true
-    
-    var name: String {
-        return URL.lastPathComponent
-    }
-    
-    var mediaType: MediaType {
-        switch "hevc:mp4:mov".contains(URL.pathExtension.lowercased()){
-        case true: return .video
-        case false: return .photo
-        }
-    }
+enum MediaType {
+    case photo
+    case video
+}
+
+class File {
+    let URL: URL    
+    var name: String
+    var mediaType: MediaType
+    var album: String
+    var shortPath: String
     
     static let rootAlbumName = "PhotoImport"
     
-    var album: String {
-        guard URL.pathComponents[URL.pathComponents.count - 2] != "Documents" else {
-            return File.rootAlbumName
-        }
-        return URL.pathComponents[URL.pathComponents.count - 2]
-    }
-    
-    init(fileURL: URL) {
+    init(fileURL: URL, shortPath: String) {
         self.URL = fileURL
+        self.shortPath = shortPath
+        self.name = URL.lastPathComponent
+        
+        self.mediaType = ("hevc:mp4:mov".contains(URL.pathExtension.lowercased())) ? .video : .photo
+        self.album = (URL.pathComponents[URL.pathComponents.count - 2] == "Documents") ? File.rootAlbumName : URL.pathComponents[URL.pathComponents.count - 2]        
     }
-    
-    mutating func toggleSelection() {
-        selected.toggle()
-    }
-    
-    
 }

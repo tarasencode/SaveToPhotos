@@ -9,25 +9,41 @@
 import Foundation
 import Photos
 
-class Saver {
+enum answer {
+    case allowed
+    case denied
+}
 
+class Saver {
     var data = [[File]]()
-    
-    
     var filesCount: Int64 {
         return Int64(data.flatMap { $0 }.count)
     }
     var canceled = false
-    
     var currentAlbum: PHAssetCollection? = nil
     
+    private var documentsURL: URL!
+    
+    func executePermissionRequest(completionHandler: @escaping (answer) -> Void) {
+        PHPhotoLibrary.requestAuthorization { status in
+            switch status {
+            case .authorized:
+                completionHandler(.allowed)
+            default:
+                completionHandler(.denied)
+            }
+        }
+    }
     
     func getFiles() {
+        NSLog("get files")
         data = [[File]]()
+        var tempData = [File]()
         let fileManager = FileManager()
-        let directoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+        print(documentsURL) //MARK: delete
         let resourceKeys = Set<URLResourceKey>([.isRegularFileKey])
-        let directoryEnumerator = fileManager.enumerator(at: directoryURL, includingPropertiesForKeys: Array(resourceKeys), options: .skipsHiddenFiles)!
+        let directoryEnumerator = fileManager.enumerator(at: documentsURL, includingPropertiesForKeys: Array(resourceKeys), options: .skipsHiddenFiles)!
         let typesAllowed = "heif:jpeg:jpg:raw:png:gif:tiff:hevc:mp4:mov"
         var prevAlbum = ""
         var albumId = -1
@@ -39,17 +55,19 @@ class Saver {
                 typesAllowed.contains(fileURL.pathExtension.lowercased())
             else { continue }
             
-            let fileAlbum = fileURL.pathComponents[fileURL.pathComponents.count - 2]
+            let shortPath = fileURL.relativePath.replacingOccurrences(of: documentsURL.relativePath, with: "")
+            tempData.append(File(fileURL: fileURL, shortPath: shortPath))
+        }
+        
+        for file in tempData.sorted(by: {$0.shortPath < $1.shortPath }) {
+            let fileAlbum = file.URL.pathComponents[file.URL.pathComponents.count - 2]
             if prevAlbum != fileAlbum {
                 prevAlbum = fileAlbum
                 albumId += 1
                 data.append([File]())
             }
-//            print(URL)
-            let newFile = File(fileURL: fileURL)
-            data[albumId].append(newFile)
-//            print("\(fileAlbum) : \(URL)") // удалить!!!!!!!!!!!
             
+            data[albumId].append(file)
         }
     }
     
@@ -58,35 +76,20 @@ class Saver {
         return file.name
     }
     
-    func getAlbumName(_ albumId: Int) -> String{
-        let file = data[albumId][0]
+    func getAlbumTitle(_ albumId: Int) -> String{
+        let albumName = (data[albumId][0].album == File.rootAlbumName) ? "" : "\(data[albumId][0].album) – "
+        let countString = "\(data[albumId].count) "
+        let filesString = (data[albumId].count > 1) ? "files" : "file"
         
-        var fileCount: String
-        if data[albumId].count == 1 {
-            fileCount = "\(data[albumId].count) file"
-        } else {
-            fileCount = "\(data[albumId].count) files"
-        }
-        
-        if file.album == "Documents" {
-            return "/ – \(fileCount)"
-        } else {
-            return "\(file.album) – \(fileCount)"
-        }
+        return albumName + countString + filesString
     }
     
-    func isSelected(_ albumId:Int, _ fileId:Int) -> Bool {
-        let file = data[albumId][fileId]
-        return file.selected
-    }
     
     func addAssetCollection(album: String) {
         do {
             try PHPhotoLibrary.shared().performChangesAndWait({
-                // Request creating an asset from the image.
 //                NSLog("album request - \(album)")
                 PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: album)
-                
             })
         }
         catch { print("there is an error in collection")}
@@ -108,15 +111,14 @@ class Saver {
     }
     
     func addAsset(file: File, album: PHAssetCollection) {
-//        NSLog("➡️adding \(file.name)")
+//        NSLog("adding \(file.name)")
         do {
             try PHPhotoLibrary.shared().performChangesAndWait({
                 // Request creating an asset from the image.
                 var creationRequest: PHAssetChangeRequest
                 switch file.mediaType {
                     case .photo: creationRequest = PHAssetChangeRequest.creationRequestForAssetFromImage(atFileURL: file.URL)!
-                    case .video: creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: file.URL)!
-                    
+                    case .video: creationRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: file.URL)!                    
                 }
 
                 // Request editing the album.
@@ -125,7 +127,7 @@ class Saver {
                         print("album \(file.album) is not exitst (File: \(file.name))")
                         return }
                 // Get a placeholder for the new asset and add it to the album editing request.
-//                NSLog("➡️new asset request \(file.name)")
+//                NSLog("new asset request \(file.name)")
                 addAssetRequest.addAssets([creationRequest.placeholderForCreatedAsset!] as NSArray)
                 
             })
@@ -139,34 +141,12 @@ class Saver {
         } catch  { print(error) }
     }
     
-//    func deleteFolders() {
-//        let fileManager = FileManager()
-//        let directoryURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
-//        let resourceKeys = Set<URLResourceKey>([.isDirectoryKey])
-//        let directoryEnumerator = fileManager.enumerator(at: directoryURL, includingPropertiesForKeys: Array(resourceKeys), options: [.skipsHiddenFiles,.skipsSubdirectoryDescendants])!
-//        
-//        
-//        for case let fileURL as URL in directoryEnumerator {
-//            if let resourceValues = try? fileURL.resourceValues(forKeys: resourceKeys) {
-//                guard resourceValues.isDirectory! else { continue }
-//                // is an empty folder?
-//                print(fileURL)
-//                let resourceKeys = Set<URLResourceKey>([.isRegularFileKey])
-//                let fileEnumerator = fileManager.enumerator(at: fileURL, includingPropertiesForKeys: Array(resourceKeys), options: [.skipsHiddenFiles])!
-//
-////                guard fileEnumerator.nextObject() != nil else {
-////                    print("folder is not empty")
-////                    continue
-////                }
-//                
-//                // delete
-////                do {
-////                    try FileManager.default.removeItem(at: fileURL)
-////                    print("rem: \(fileURL)")
-////                } catch  { print(error) }
-//            }
-//            
-//        }
-//    }
-    
+    func deleteFolders() {
+        do {
+            let contents = try FileManager.default.contentsOfDirectory(at: documentsURL, includingPropertiesForKeys: nil, options: [.skipsSubdirectoryDescendants])
+            for folder in contents {
+                deleteFile(at: folder)
+            }
+        } catch { print(error) }
+    }
 }

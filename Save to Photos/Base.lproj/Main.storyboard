@@ -24,15 +24,15 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         </progressView>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="checkmark" indentationWidth="10" reuseIdentifier="Cell" textLabel="YgS-2u-KAw" style="IBUITableViewCellStyleDefault" id="7Kb-eG-RB7">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="Cell" textLabel="YgS-2u-KAw" style="IBUITableViewCellStyleDefault" id="7Kb-eG-RB7">
                                 <rect key="frame" x="0.0" y="30" width="375" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="7Kb-eG-RB7" id="tpN-mt-2dZ">
-                                    <rect key="frame" x="0.0" y="0.0" width="335" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="YgS-2u-KAw">
-                                            <rect key="frame" x="16" y="0.0" width="319" height="43.5"/>
+                                            <rect key="frame" x="16" y="0.0" width="343" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -48,7 +48,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="iTunes Files" id="FOU-ar-rc6">
-                        <barButtonItem key="leftBarButtonItem" title="Select All" id="CkD-0z-0F1"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="CkD-0z-0F1">
+                            <connections>
+                                <action selector="refreshButtonPressed:" destination="QtF-3B-phB" id="T4B-A7-OkW"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Save" id="QC7-15-XX0">
                             <connections>
                                 <action selector="saveButtonPressed:" destination="QtF-3B-phB" id="a0m-c0-nA9"/>
@@ -56,10 +60,11 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="barButton" destination="QC7-15-XX0" id="y1Y-Sc-3e2"/>
                         <outlet property="emptyView" destination="Yve-xu-Ukx" id="GDb-8O-ZeJ"/>
-                        <outlet property="mainView" destination="o8y-5c-vo0" id="al3-b2-b1E"/>
+                        <outlet property="errorView" destination="dfz-6Q-YMf" id="drp-sP-zev"/>
                         <outlet property="progressView" destination="4XR-ZI-3Sn" id="tO3-PN-dDH"/>
+                        <outlet property="refreshButton" destination="CkD-0z-0F1" id="qAi-w7-Dqf"/>
+                        <outlet property="saveButton" destination="QC7-15-XX0" id="y1Y-Sc-3e2"/>
                         <outlet property="tableView" destination="o8y-5c-vo0" id="17G-nq-7Z0"/>
                     </connections>
                 </tableViewController>
@@ -113,6 +118,42 @@
                         <constraint firstItem="aJo-vQ-IrR" firstAttribute="leading" secondItem="Yve-xu-Ukx" secondAttribute="leading" constant="20" id="xYe-fL-TGj"/>
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="QXM-yH-HpE"/>
+                </view>
+                <view contentMode="scaleToFill" id="dfz-6Q-YMf">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                    <subviews>
+                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="Ocq-Ct-hM8">
+                            <rect key="frame" x="20" y="297.5" width="335" height="72"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Acess denied" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WRw-P3-AKt">
+                                    <rect key="frame" x="92" y="0.0" width="151" height="31.5"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle1"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="2re-PP-ffI">
+                                    <rect key="frame" x="28.5" y="51.5" width="278" height="20.5"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Go to settings and give a permission" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hfA-jB-fyO">
+                                            <rect key="frame" x="0.0" y="0.0" width="278" height="20.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </stackView>
+                            </subviews>
+                        </stackView>
+                    </subviews>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <constraints>
+                        <constraint firstItem="Ocq-Ct-hM8" firstAttribute="centerX" secondItem="dfz-6Q-YMf" secondAttribute="centerX" id="0nT-dL-TE6"/>
+                        <constraint firstAttribute="trailing" secondItem="Ocq-Ct-hM8" secondAttribute="trailing" constant="20" id="C6M-gs-DA7"/>
+                        <constraint firstItem="Ocq-Ct-hM8" firstAttribute="leading" secondItem="dfz-6Q-YMf" secondAttribute="leading" constant="20" id="EFn-JW-Iy4"/>
+                        <constraint firstItem="Ocq-Ct-hM8" firstAttribute="centerY" secondItem="dfz-6Q-YMf" secondAttribute="centerY" id="XUg-jb-bsi"/>
+                    </constraints>
+                    <viewLayoutGuide key="safeArea" id="H6U-zn-3TL"/>
                 </view>
             </objects>
             <point key="canvasLocation" x="1119.2" y="-228.03598200899552"/>

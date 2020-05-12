@@ -14,7 +14,6 @@
 		7C519AA724603FF700F4BB0F /* Saver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C519AA624603FF700F4BB0F /* Saver.swift */; };
 		7C519AA9246065C300F4BB0F /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C519AA8246065C300F4BB0F /* TableViewController.swift */; };
 		7CF7839D24670184000D0F27 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7839C24670184000D0F27 /* File.swift */; };
-		7CF7839F24670203000D0F27 /* MediaType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7839E24670203000D0F27 /* MediaType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,7 +26,6 @@
 		7C519AA624603FF700F4BB0F /* Saver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Saver.swift; sourceTree = "<group>"; };
 		7C519AA8246065C300F4BB0F /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		7CF7839C24670184000D0F27 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
-		7CF7839E24670203000D0F27 /* MediaType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,7 +61,6 @@
 				7C519A94245FF5B600F4BB0F /* AppDelegate.swift */,
 				7C519AA8246065C300F4BB0F /* TableViewController.swift */,
 				7CF7839C24670184000D0F27 /* File.swift */,
-				7CF7839E24670203000D0F27 /* MediaType.swift */,
 				7C519AA624603FF700F4BB0F /* Saver.swift */,
 				7C519A98245FF5B600F4BB0F /* Main.storyboard */,
 				7C519A9B245FF5B700F4BB0F /* Assets.xcassets */,
@@ -144,7 +141,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7CF7839F24670203000D0F27 /* MediaType.swift in Sources */,
 				7C519AA724603FF700F4BB0F /* Saver.swift in Sources */,
 				7CF7839D24670184000D0F27 /* File.swift in Sources */,
 				7C519AA9246065C300F4BB0F /* TableViewController.swift in Sources */,
