@@ -15,15 +15,20 @@ class TableViewController: UITableViewController {
     @IBOutlet var progressView: UIProgressView!
     @IBOutlet var emptyView: UIView!
     @IBOutlet var errorView: UIView!
+    @IBOutlet var refreshButton: UIBarButtonItem!
+    @IBOutlet var saveButton: UIBarButtonItem!
     
+    @IBAction func gotoSettingsPressed(_ sender: Any) {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+        if UIApplication.shared.canOpenURL(settingsURL) {
+            UIApplication.shared.open(settingsURL, completionHandler: nil)
+        }
+    }
     
     @IBAction func supportPressed(_ sender: Any) {
         guard let url = URL(string: "https://support.apple.com/en-us/HT201301") else { return }
         UIApplication.shared.open(url)
     }
-    
-    @IBOutlet var refreshButton: UIBarButtonItem!
-    @IBOutlet var saveButton: UIBarButtonItem!
     
     @IBAction func refreshButtonPressed(_ sender: UIBarButtonItem) {
         sender.isEnabled = false
