@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Save to Photos.xcodeproj">
+      location = "self:/Users/oleg/Developer/Save to Photos/Save Photos.xcodeproj">
    </FileRef>
 </Workspace>

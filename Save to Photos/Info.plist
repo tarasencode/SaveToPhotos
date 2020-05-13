@@ -39,7 +39,9 @@
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>We need access to Camera Roll to save Photos</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>We have to create an Album</string>
+	<string>We need access to Camera Roll to create Albums</string>
+	<key>LSSupportsOpeningDocumentsInPlace</key>
+	<true/>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

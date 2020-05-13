@@ -17,7 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		7C519A91245FF5B600F4BB0F /* Save to Photos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Save to Photos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C519A91245FF5B600F4BB0F /* Save Photos.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Save Photos.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C519A94245FF5B600F4BB0F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7C519A99245FF5B600F4BB0F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		7C519A9B245FF5B700F4BB0F /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -50,7 +50,7 @@
 		7C519A92245FF5B600F4BB0F /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				7C519A91245FF5B600F4BB0F /* Save to Photos.app */,
+				7C519A91245FF5B600F4BB0F /* Save Photos.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -73,9 +73,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		7C519A90245FF5B600F4BB0F /* Save to Photos */ = {
+		7C519A90245FF5B600F4BB0F /* Save Photos */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7C519AA3245FF5B700F4BB0F /* Build configuration list for PBXNativeTarget "Save to Photos" */;
+			buildConfigurationList = 7C519AA3245FF5B700F4BB0F /* Build configuration list for PBXNativeTarget "Save Photos" */;
 			buildPhases = (
 				7C519A8D245FF5B600F4BB0F /* Sources */,
 				7C519A8E245FF5B600F4BB0F /* Frameworks */,
@@ -85,9 +85,9 @@
 			);
 			dependencies = (
 			);
-			name = "Save to Photos";
+			name = "Save Photos";
 			productName = "Save to Photos";
-			productReference = 7C519A91245FF5B600F4BB0F /* Save to Photos.app */;
+			productReference = 7C519A91245FF5B600F4BB0F /* Save Photos.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -98,14 +98,14 @@
 			attributes = {
 				LastSwiftUpdateCheck = 1010;
 				LastUpgradeCheck = 1010;
-				ORGANIZATIONNAME = oleG;
+				ORGANIZATIONNAME = tarasencode;
 				TargetAttributes = {
 					7C519A90245FF5B600F4BB0F = {
 						CreatedOnToolsVersion = 10.1;
 					};
 				};
 			};
-			buildConfigurationList = 7C519A8C245FF5B600F4BB0F /* Build configuration list for PBXProject "Save to Photos" */;
+			buildConfigurationList = 7C519A8C245FF5B600F4BB0F /* Build configuration list for PBXProject "Save Photos" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -118,7 +118,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				7C519A90245FF5B600F4BB0F /* Save to Photos */,
+				7C519A90245FF5B600F4BB0F /* Save Photos */,
 			);
 		};
 /* End PBXProject section */
@@ -325,7 +325,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		7C519A8C245FF5B600F4BB0F /* Build configuration list for PBXProject "Save to Photos" */ = {
+		7C519A8C245FF5B600F4BB0F /* Build configuration list for PBXProject "Save Photos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7C519AA1245FF5B700F4BB0F /* Debug */,
@@ -334,7 +334,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		7C519AA3245FF5B700F4BB0F /* Build configuration list for PBXNativeTarget "Save to Photos" */ = {
+		7C519AA3245FF5B700F4BB0F /* Build configuration list for PBXNativeTarget "Save Photos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				7C519AA4245FF5B700F4BB0F /* Debug */,

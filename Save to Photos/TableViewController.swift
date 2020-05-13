@@ -45,9 +45,7 @@ class TableViewController: UITableViewController {
             refreshButton.isEnabled = false
             moveToPhotos()
         } else {
-            svr.canceled = true
-            progressView.isHidden = true
-            sender.title = "Save"
+            cancel()
             startApp()
         }
     }
@@ -55,8 +53,19 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NSLog("view did load")
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appMovedToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+
         saveButton.isEnabled = false
         tableView.separatorStyle = .none
+        navigationItem.title = "iTunes Files"
+        startApp()
+    }
+    
+    @objc func appMovedToBackground() {
+        cancel()
+    }
+    @objc func appMovedToForeground() {
         startApp()
     }
     
@@ -85,6 +94,8 @@ class TableViewController: UITableViewController {
         }
         tableView.reloadData()
         progressView.isHidden = true
+        let files = (svr.filesCount > 1) ? "files" : "file"
+        navigationItem.title = "\(svr.filesCount) \(files)"
         saveButton.title = "Save"
         saveButton.isEnabled = true
         refreshButton.isEnabled = true
@@ -96,6 +107,7 @@ class TableViewController: UITableViewController {
     func showError() {
         NSLog("showError")
         progressView.isHidden = true
+        navigationItem.title = "iTunes Files"
         saveButton.title = "Save"
         saveButton.isEnabled = false
         refreshButton.isEnabled = true
@@ -108,6 +120,7 @@ class TableViewController: UITableViewController {
         NSLog("showEmpty")
         tableView.reloadData()
         progressView.isHidden = true
+        navigationItem.title = "iTunes Files"
         saveButton.title = "Save"
         saveButton.isEnabled = false
         refreshButton.isEnabled = true
@@ -123,10 +136,17 @@ class TableViewController: UITableViewController {
         self.present(alert, animated: true)
     }
     
+    func cancel() {
+        svr.canceled = true
+        progressView.isHidden = true
+        saveButton.title = "Save"
+        UIApplication.shared.isIdleTimerDisabled = false
+    }
+    
     func moveToPhotos() {
         let progress = Progress(totalUnitCount: svr.filesCount)
         var totalProcessed = 0
-        
+        UIApplication.shared.isIdleTimerDisabled = true
         DispatchQueue(label: "moving").async {
             let svr = self.svr
             for album in svr.data {
@@ -150,6 +170,7 @@ class TableViewController: UITableViewController {
                         // 100% complete
                         if totalProcessed == svr.filesCount {
                             svr.deleteFolders()
+                            UIApplication.shared.isIdleTimerDisabled = false
                             self.showDone(filesCount: totalProcessed)
                         }
                     }
