@@ -22,7 +22,7 @@ class Saver {
     var canceled = false
     var currentAlbum: PHAssetCollection? = nil
     
-    private var documentsURL: URL!
+    var documentsURL: URL
     
     func executePermissionRequest(completionHandler: @escaping (answer) -> Void) {
         PHPhotoLibrary.requestAuthorization { status in
@@ -35,18 +35,23 @@ class Saver {
         }
     }
     
+    init() {
+        let fileManager = FileManager()
+        documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+    
     func getFiles() {
         NSLog("get files")
         data = [[File]]()
         var tempData = [File]()
         let fileManager = FileManager()
-        documentsURL = fileManager.urls(for: .documentDirectory, in: .userDomainMask)[0]
         print(documentsURL) //MARK: delete
         let resourceKeys = Set<URLResourceKey>([.isRegularFileKey])
         let directoryEnumerator = fileManager.enumerator(at: documentsURL, includingPropertiesForKeys: Array(resourceKeys), options: .skipsHiddenFiles)!
         let typesAllowed = "heif:jpeg:jpg:raw:png:gif:tiff:hevc:mp4:mov"
         var prevAlbum = ""
         var albumId = -1
+        var rootId:Int?
 
         
         for case let fileURL as URL in directoryEnumerator {
@@ -65,9 +70,14 @@ class Saver {
                 prevAlbum = fileAlbum
                 albumId += 1
                 data.append([File]())
-            }
-            
+                if fileAlbum == "Documents" {
+                    rootId = albumId
+                }
+            }            
             data[albumId].append(file)
+        }
+        if rootId != nil {
+            data.insert(data.remove(at: rootId!), at: 0)
         }
     }
     
@@ -77,7 +87,7 @@ class Saver {
     }
     
     func getAlbumTitle(_ albumId: Int) -> String{
-        let albumName = (data[albumId][0].album == File.rootAlbumName) ? "" : "\(data[albumId][0].album) – "
+        let albumName = (data[albumId][0].album == File.rootAlbumName) ? "Main Folder – " : "\(data[albumId][0].album) – "
         let countString = "\(data[albumId].count) "
         let filesString = (data[albumId].count > 1) ? "files" : "file"
         

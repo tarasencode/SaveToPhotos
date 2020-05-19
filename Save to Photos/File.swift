@@ -19,7 +19,7 @@ class File {
     var album: String
     var shortPath: String
     
-    static let rootAlbumName = "PhotoImport"
+    static let rootAlbumName = "Save Photos"
     
     init(fileURL: URL, shortPath: String) {
         self.URL = fileURL

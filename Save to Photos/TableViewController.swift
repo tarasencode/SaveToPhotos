@@ -43,6 +43,7 @@ class TableViewController: UITableViewController {
             progressView.isHidden = false
             sender.title = "Cancel"
             refreshButton.isEnabled = false
+            tableView.scrollRectToVisible(CGRect(x: 0, y: 0, width: 1, height: 1), animated: true)
             moveToPhotos()
         } else {
             cancel()
@@ -53,6 +54,7 @@ class TableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         NSLog("view did load")
+        FileManager.default.createFile(atPath: svr.documentsURL.path + "/.placeholder", contents: nil, attributes: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToBackground), name: UIApplication.willResignActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(appMovedToForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
 
